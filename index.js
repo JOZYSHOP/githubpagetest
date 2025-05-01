@@ -269,3 +269,78 @@ document.addEventListener('DOMContentLoaded', function() {
     // Creamos el filtro de precio
     crearFiltroPrecio();
 });
+// Función para ajustar el carrito en dispositivos móviles
+function optimizarCarritoParaMovil() {
+    const anchoPantalla = window.innerWidth;
+    const carritoContainer = document.querySelector('.container-cart-products');
+    const iconoCarrito = document.querySelector('.icon-cart');
+    
+    // Si es un dispositivo móvil pequeño
+    if (anchoPantalla <= 480) {
+        // Asegurarse de que el carrito se cierre al hacer clic fuera de él
+        document.addEventListener('click', function(e) {
+            if (!carritoContainer.contains(e.target) && !iconoCarrito.contains(e.target) && 
+                !carritoContainer.classList.contains('hidden-cart')) {
+                carritoContainer.classList.add('hidden-cart');
+            }
+        });
+        
+        // Cerrar el carrito al hacer scroll
+        window.addEventListener('scroll', function() {
+            if (!carritoContainer.classList.contains('hidden-cart')) {
+                carritoContainer.classList.add('hidden-cart');
+            }
+        });
+    }
+}
+
+// Función para ajustar el filtro de precio en dispositivos móviles
+function optimizarFiltroParaMovil() {
+    const anchoPantalla = window.innerWidth;
+    const filtroContainer = document.querySelector('.filtro-precio-container');
+    
+    // Si es un dispositivo móvil
+    if (anchoPantalla <= 768) {
+        // Crear botón para mostrar/ocultar filtro
+        const toggleFiltro = document.createElement('button');
+        toggleFiltro.id = 'toggle-filtro';
+        toggleFiltro.textContent = 'Mostrar filtros';
+        toggleFiltro.classList.add('boton-toggle-filtro');
+        
+        // Contenedor para los filtros
+        const filtroContenido = document.createElement('div');
+        filtroContenido.classList.add('filtro-contenido');
+        filtroContenido.style.display = 'none';
+        
+        // Mover el contenido del filtro al nuevo contenedor
+        while (filtroContainer.firstChild) {
+            filtroContenido.appendChild(filtroContainer.firstChild);
+        }
+        
+        // Añadir botón y contenido al contenedor principal
+        filtroContainer.appendChild(toggleFiltro);
+        filtroContainer.appendChild(filtroContenido);
+        
+        // Añadir evento para mostrar/ocultar filtro
+        toggleFiltro.addEventListener('click', function() {
+            if (filtroContenido.style.display === 'none') {
+                filtroContenido.style.display = 'block';
+                toggleFiltro.textContent = 'Ocultar filtros';
+            } else {
+                filtroContenido.style.display = 'none';
+                toggleFiltro.textContent = 'Mostrar filtros';
+            }
+        });
+    }
+}
+
+// Llamar a las funciones de optimización para móviles
+window.addEventListener('DOMContentLoaded', function() {
+    optimizarCarritoParaMovil();
+    optimizarFiltroParaMovil();
+    
+    // Volver a aplicar si cambia el tamaño de la ventana
+    window.addEventListener('resize', function() {
+        optimizarCarritoParaMovil();
+    });
+});
